@@ -4,12 +4,13 @@ import paho.mqtt.client as mqttclient
 import time
 import json
 import geocoder
+import random
 
 BROKER_ADDRESS = "demo.thingsboard.io"
 PORT = 1883
-THINGS_BOARD_ACCESS_TOKEN = "7b2juGR8vWVGb5iKWLP7"
-
-
+THINGS_BOARD_ACCESS_TOKEN = "5ROY8XpEiwZCHRpLeVmg"
+# 5ROY8XpEiwZCHRpLeVmg
+# 7b2juGR8vWVGb5iKWLP7
 def subscribed(client, userdata, mid, granted_qos):
     print("Subscribed...")
 
@@ -47,19 +48,23 @@ client.on_message = recv_message
 temp = 30
 humi = 50
 light_intesity = 100
-longitude = 107.1003
-latitude = 16.8163
+longitude = 106.6297
+latitude = 10.8231
 counter = 0
 
 
 g = geocoder.ip('me')
-print(g.latlng)
 
+print(g.latlng)
+# g.latlng[1] long
+# g.latlng[0] lat
 while True:
+    temp = random.randint(-31,30)
+    humi = random.randint(-1,100)
     collect_data = {'temperature': temp, 'humidity': humi, 'light':light_intesity,
                     'longitude':g.latlng[1], 'latitude':g.latlng[0]}
-    temp += 1
-    humi += 1
+    # temp += 1
+    # humi += 1
     light_intesity += 1
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
     time.sleep(10)
